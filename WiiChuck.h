@@ -1,3 +1,4 @@
+
 /*
  * Nunchuck -- Use a Wii Nunchuck
  * Tim Hirzel http://www.growdown.com
@@ -31,7 +32,7 @@
 #ifndef WiiChuck_h
 #define WiiChuck_h
 
-#include "WProgram.h" 
+#include "Arduino.h" 
 #include <Wire.h>
 #include <math.h>
 
@@ -45,7 +46,8 @@
 #define DEFAULT_ZERO_JOY_X 124
 #define DEFAULT_ZERO_JOY_Y 128
 
-
+//#define byte uint8_t
+//#define boolean bool
 
 class WiiChuck {
 private:
@@ -76,8 +78,8 @@ public:
     cnt = 0;
     averageCounter = 0;
     Wire.beginTransmission (0x52);	// transmit to device 0x52
-    Wire.send (0x40);		// sends memory address
-    Wire.send (0x00);		// sends memory address
+    Wire.write (0x40);		// sends memory address
+    Wire.write (0x00);		// sends memory address
     Wire.endTransmission ();	// stop transmitting
     update();            
     for (i = 0; i<3;i++) {
@@ -98,7 +100,7 @@ public:
     Wire.requestFrom (0x52, 6);	// request data from nunchuck
     while (Wire.available ()) {
       // receive byte as an integer
-      status[cnt] = _nunchuk_decode_byte (Wire.receive()); //
+      status[cnt] = _nunchuk_decode_byte (Wire.read()); //
       cnt++;
     }
     if (cnt > 5) {
@@ -201,7 +203,7 @@ private:
   void _send_zero()
   {
     Wire.beginTransmission (0x52);	// transmit to device 0x52
-    Wire.send (0x00);		// sends one byte
+    Wire.write (0x00);		// sends one byte
     Wire.endTransmission ();	// stop transmitting
   }
 
